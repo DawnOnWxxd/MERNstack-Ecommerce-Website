@@ -6,8 +6,8 @@ const registerUser = async (req,res) => {
     try {
         const user = await authenticationData.create({...req.body})
         const token = await user.createJWT()
-        console.log(`Created user: ${user} and toker: ${token}`)
-        res.status(StatusCodes.CREATED).send(token)
+        console.log(`Created user: ${user} and token: ${token}}`)
+        res.status(StatusCodes.CREATED).send({name: user.userName, token: token})
     } catch (error) {
         console.log(error)
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error)
