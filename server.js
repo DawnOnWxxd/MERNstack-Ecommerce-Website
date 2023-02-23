@@ -7,6 +7,7 @@ require('dotenv').config()
 
 server.use(express.urlencoded({extended:false}))
 server.use(express.json())
+server.use(express.static('./public'))
 server.use('/',router)
 
 const port = process.env.PORT || 3000
