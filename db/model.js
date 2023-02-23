@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -5,8 +6,14 @@ const authSchema = new mongoose.Schema({
     userName : {
         type : String,
         trim : true,
-        required : true,
-        unique : true,
+        required : [true, "Username is required"],
+    },
+
+    userEmail : {
+        type : String,
+        trim : true,
+        required : [true, "Email is required"],
+        unique : [true, "Email must be unique"]
     },
 
     password : {
@@ -22,9 +29,9 @@ authSchema.pre('save', async function(next){
 })
 
 authSchema.methods.createJWT = async function () {
-    return jwt.sign({userId: this._id, userName: this.userName},'jwtsecret')
+    return jwt.sign({userId: this._id, userName: this.userName},process.env.JWT_SIGNATURE)
 }
 
-const authDocument = mongoose.model('authDocument', authSchema)
+const authDocument = mongoose.model('authenticationData', authSchema)
 
 module.exports = authDocument;
