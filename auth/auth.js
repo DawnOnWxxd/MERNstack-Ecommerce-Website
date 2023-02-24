@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes/build/cjs/status-codes')
 const authenticationData = require('../db/model.js')
 const jwt = require('jsonwebtoken')
+const authDocument = require('../db/model.js')
 
 const registerUser = async (req,res) => {
     try {
@@ -17,10 +18,22 @@ const registerUser = async (req,res) => {
 
 const loginUser = async (req,res) => {
     try {
-        
+        const {userEmail,password} = await req.body
+        if(!userEmail || !password){
+            return res.status(StatusCodes.BAD_REQUEST).send("Please provide email and password")
+        }
+        const user = await authenticationData.findOne({userEmail})
+        if(!user){
+            return res.status(StatusCodes.UNAUTHORIZED).send("Not Valid Credentials")
+        }
+        const passwordMatch = await user.comparePass(password)
+        if(!passwordMatch){
+            return res.status(StatusCodes.UNAUTHORIZED).send("Credentials do not match")
+        }
+        res.status(StatusCodes.ACCEPTED).send('Successfully Logged In')
     } catch (error) {
         
     }
 }
 
-module.exports = {registerUser};
+module.exports = {registerUser,loginUser};

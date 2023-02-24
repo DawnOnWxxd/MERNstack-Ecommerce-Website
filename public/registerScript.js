@@ -16,7 +16,7 @@ const getUserData = async () => {
     .then(
         (response) => {
             saveToken({name:response.data.name, token:response.data.token})
-            //Amarjeet enter code here so it says "Successfully registered on the frontend"
+            //Amarjeet enter code here so it says "Successfully registered" on the frontend
         }, (error) => {
             console.log(error)
         }

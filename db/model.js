@@ -32,6 +32,9 @@ authSchema.methods.createJWT = async function () {
     return jwt.sign({userId: this._id, userName: this.userName},process.env.JWT_SIGNATURE)
 }
 
+authSchema.methods.comparePass = async function(pass) {
+    return await bcrypt.compare(pass,this.password)
+}
 const authDocument = mongoose.model('authenticationData', authSchema)
 
 module.exports = authDocument;
